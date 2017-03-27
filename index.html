@@ -1,0 +1,126 @@
+<!DOCTYPE html >
+<html lang="en" class="full">
+<head>
+    <meta charset="UTF-8">
+    <title><!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <title>My Videotron</title>
+
+            <!-- Bootstrap Core CSS -->
+            <link href="css/bootstrap.min.css" rel="stylesheet">
+
+            <!-- Custom CSS -->
+            <link href="css/style.css" rel="stylesheet">
+
+            <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+            <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+            <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+            <![endif]-->
+
+
+        </head>
+
+
+
+        <div id="myVideo" class="container-fluid hidden">
+            <div class="row">
+                <div class="col-lg-12">
+                    <video autoplay id="video1" controls>
+                        <source src="video/pan_movie.mp4" type="video/mp4">
+                    </video>
+                </div>
+            </div>
+        </div>
+
+
+<body>
+
+
+
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+<script src="js/mqttws31.js" type="text/javascript"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="js/bootstrap.min.js"></script>
+
+<script>
+
+    //=========================================
+    //Subscribe MQTT Events
+    //=========================================
+    var mqtt;
+
+    function MQTTconnect() {
+        mqtt = new Paho.MQTT.Client("52.207.31.245", 9001, "client-MF-Ipad-X1");
+
+        mqtt.onConnectionLost = onConnectionLost;
+        mqtt.onMessageArrived = onMessageArrived;
+
+        // connect the client
+        mqtt.connect({onSuccess:onConnect});
+
+
+    }
+
+    function onConnect() {
+        console.log("Connected");
+        // Connection succeeded; subscribe to our topic
+        // Connection succeeded; subscribe to our topic, you can add multile lines of these
+        mqtt.subscribe('/World', {qos: 1});
+        mqtt.subscribe('/vsmarthome/notify/highlights', {qos: 1});
+
+
+        //use the below if you want to publish to a topic on connect
+        message = new Paho.MQTT.Message("Hello");
+        message.destinationName = "/World";
+        mqtt.send(message);
+
+    }
+
+    function onConnectionLost(response) {
+        console.log("Connection Lost", response);
+        setTimeout(MQTTconnect, 2000);
+
+    };
+
+    /**
+     * MQTT callback when a message has arrived through one of the channels
+     */
+    function onMessageArrived(message) {
+        console.log("Message arrived", message);
+        var topic = message.destinationName;
+        console.log("Topic", topic);
+        var payload = message.payloadString;
+        console.log("Payload", payload);
+
+
+        if (topic == "/vsmarthome/notify/highlights") {
+            console.log("highlights, payload");
+            //change the source to the requested game event
+            $("#myVideo").removeClass("hidden");
+            $('#myVideo video source').attr('src', "video/pan_movie.mp4");
+            $("#myVideo video")[0].load();
+
+
+        }
+    };
+
+    $( document ).ready(function() {
+        console.log("ready!");
+        MQTTconnect();
+    });
+
+</script>
+</body>
+
+</html></title>
+</head>
+<body>
+
+</body>
+</html>
