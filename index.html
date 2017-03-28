@@ -29,7 +29,7 @@
         <div id="myVideo" class="container-fluid hidden">
             <div class="row">
                 <div class="col-lg-12">
-                    <video autoplay id="video1" controls>
+                    <video id="video1" controls>
                         <source src="video/lanceetcompte.mp4" type="video/mp4">
                     </video>
                 </div>
@@ -72,7 +72,7 @@
         // Connection succeeded; subscribe to our topic
         // Connection succeeded; subscribe to our topic, you can add multile lines of these
         mqtt.subscribe('/World', {qos: 1});
-        mqtt.subscribe('/vsmarthome/notify/highlights', {qos: 1});
+        mqtt.subscribe('/vsmarthome/notify/transfer_to_phone', {qos: 1});
 
 
         //use the below if you want to publish to a topic on connect
@@ -99,12 +99,14 @@
         console.log("Payload", payload);
 
 
-        if (topic == "/vsmarthome/notify/highlights") {
+        if (topic == "/vsmarthome/notify/transfer_to_phone") {
             console.log("highlights, payload");
             //change the source to the requested game event
+            $("body").css('background-color', '#000000')
             $("#myVideo").removeClass("hidden");
             $('#myVideo video source').attr('src', "video/lanceetcompte.mp4");
             $("#myVideo video")[0].load();
+            $("#myVideo video")[0].play();
 
 
         }
