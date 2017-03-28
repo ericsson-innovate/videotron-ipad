@@ -26,11 +26,11 @@
 
 
 
-        <div id="myVideo" class="container-fluid hidden">
+        <div id="myVideo" class="container-fluid">
             <div class="row">
                 <div class="col-lg-12">
                     <video autoplay id="video1" controls>
-                        <source src="video/mff_nhl_demo.mp4" type="video/mp4">
+                        <source src="video/lanceetcompte.mp4" type="video/mp4">
                     </video>
                 </div>
             </div>
@@ -103,7 +103,7 @@
             console.log("highlights, payload");
             //change the source to the requested game event
             $("#myVideo").removeClass("hidden");
-            $('#myVideo video source').attr('src', "video/mff_nhl_demo.mp4");
+            $('#myVideo video source').attr('src', "video/lanceetcompte.mp4");
             $("#myVideo video")[0].load();
 
 
